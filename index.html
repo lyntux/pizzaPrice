@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pizza Price Calculator</title>
+
+<script type="text/javascript">
+// Function calculate is called when you click the calculate button.
+// It reads the values out of the form for price and diameter, 
+// calculates the price per square inch, and puts it into a continually
+// updated table at the bottom of the page.
+function calculate()
+{
+	// read the values out of the form elements, convert to numbers
+	// and store in variables
+
+	if ( window.document.getElementById("round").checked == true )
+	{
+		var action = "round"
+	}
+	else if  ( window.document.getElementById("square").checked == true )
+	{
+		var action = "square"
+	}
+	else if  ( window.document.getElementById("rectangular").checked == true )
+	{
+		var action = "rectangular"
+	}
+
+	if ( ( action == "round" ) || ( action == "square" ) )
+	{
+		var pizzaSize = parseInt(window.document.getElementById("sizeOfPizza").value);
+		var pizzaPrice = parseFloat(window.document.getElementById("priceOfPizza").value);
+	}
+	else if ( action == "rectangular" )
+	{
+		var pizzaLength = parseInt(window.document.getElementById("lengthOfPizza").value);
+		var pizzaWidth = parseInt(window.document.getElementById("widthOfPizza").value);
+		var pizzaPrice = parseFloat(window.document.getElementById("priceOfPizza").value);
+	}
+
+	if ( action == "round" )
+	{
+		var radius = ( pizzaSize / 2.0 );
+		var area = Math.PI * radius * radius;
+		var pricePerSquareInch = pizzaPrice / area;
+		var pizzaOutput = String(pizzaSize)
+	}
+	else if ( action == "square" )
+	{
+		var area = pizzaSize * pizzaSize;
+		var pricePerSquareInch = pizzaPrice / area;
+		var pizzaOutput = String(pizzaSize + '²')
+	}
+	else if ( action == "rectangular" )
+	{
+		var area = pizzaLength * pizzaWidth;
+		var pricePerSquareInch = pizzaPrice / area;
+		var pizzaOutput = String(pizzaLength + " x " + pizzaWidth)
+	}
+
+	// put the result back into the form
+	// the .toFixed(4) on the end means the resulting value will have exactly four places
+	// after the decimal point
+	oldLog = window.document.getElementById("log").innerHTML;
+
+	currentLog = "<tr style='text-align:right'><td>" + pizzaOutput + "&quot</td><td>@</td><td>$" + pizzaPrice.toFixed(2) + "</td><td>=</td><td>$</td><td><strong>" +
+		pricePerSquareInch.toFixed(4) + "</strong></td><td>/ in.</td></tr>";
+	window.document.getElementById("log").innerHTML = currentLog + oldLog;
+}
+
+function hideShow()
+{
+	if ( window.document.getElementById("rectangular").checked == true )
+	{
+		document.getElementById("roundsquare").style.display = 'none';
+		document.getElementById("rectangularL").style.display = '';
+		document.getElementById("rectangularW").style.display = '';
+	}
+	else
+	{
+		document.getElementById("roundsquare").style.display = '';
+		document.getElementById("rectangularL").style.display = 'none';
+		document.getElementById("rectangularW").style.display = 'none';
+	}
+}
+
+</script>
+</head>
+
+<body onLoad="hideShow()">
+<h1>Pizza Price-Per-Square Inch Calculation</h1>
+<form name="pizza" action="">
+<table>
+	<caption>Pizza Calculator</caption>
+	<tbody>
+	<tr><td colspan="2">
+		<label><input type="radio" name="pizzaType" id="round" value="round" onChange="hideShow();" checked>Round Pizza</label>
+		<label><input type="radio" name="pizzaType" id="square" value="square" onChange="hideShow();">Square Pizza</label>
+		<label><input type="radio" name="pizzaType" id="rectangular" value="rectangular" onChange="hideShow();">Rectangular Pizza</label></td></tr>
+	<tr id="roundsquare"><td>Size of pizza</td><td><input id="sizeOfPizza" type="text"></td></tr>
+	<tr id="rectangularL" style="display:none"><td>Length of pizza</td><td><input id="lengthOfPizza" type="text"></td></tr>
+	<tr id="rectangularW" style="display:none"><td>Width of pizza</td><td><input id="widthOfPizza" type="text"></td></tr>
+	<tr><td>Price of pizza</td><td><input id="priceOfPizza" type="text"></td></tr>
+	<tr><td colspan="2"><center><input type="button" value="Calculate" onclick="calculate()"></center></td></tr>
+</tbody></table>
+</form>
+
+<table id="log"></table>
+
+</body>
+</html>
